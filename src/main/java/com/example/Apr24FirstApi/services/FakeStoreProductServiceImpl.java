@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
-@Service
+@Service("fakeStore")
 public class FakeStoreProductServiceImpl implements ProductService{
 
 
@@ -29,7 +29,7 @@ public class FakeStoreProductServiceImpl implements ProductService{
         product.setDescription(dto.getDescription());
         Category category = new Category();
         category.setName(dto.getCategory());
-        product.setCategory(category);
+//        product.setCategory(category);
         return product;
     }
 
@@ -42,5 +42,25 @@ public class FakeStoreProductServiceImpl implements ProductService{
     @Override
     public List<Product> getAllProducts() {
         return null;
+    }
+
+    @Override
+    public Product createProduct(String title, String description, String image, double price, String categoryName) {
+        return null;
+    }
+
+    @Override
+    public Product updatePrice(long productId, double updatedPrice) {
+        return null;
+    }
+
+    @Override
+    public Product updateImage(long productId, String updatedImage) {
+        return null;
+    }
+
+    @Override
+    public boolean deleteProduct() {
+        return false;
     }
 }
