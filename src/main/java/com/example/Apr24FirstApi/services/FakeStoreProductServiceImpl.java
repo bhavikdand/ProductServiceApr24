@@ -4,6 +4,7 @@ import com.example.Apr24FirstApi.dtos.FakeProductServiceDto;
 import com.example.Apr24FirstApi.models.Category;
 import com.example.Apr24FirstApi.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -40,7 +41,7 @@ public class FakeStoreProductServiceImpl implements ProductService{
     }
 
     @Override
-    public List<Product> getAllProducts() {
+    public Page<Product> getAllProducts(int pageSize, int pageNumber) {
         return null;
     }
 

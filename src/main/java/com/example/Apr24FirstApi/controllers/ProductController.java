@@ -6,6 +6,7 @@ import com.example.Apr24FirstApi.models.Product;
 import com.example.Apr24FirstApi.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,5 +53,13 @@ public class ProductController {
         Product product = productService.createProduct(requestDto.getTitle(), requestDto.getDescription(),
                 requestDto.getImage(), requestDto.getPrice(), requestDto.getCategoryName());
         return new ResponseEntity<>(product, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<Page<Product>> getAllProducts(@RequestParam(value = "pageSize", defaultValue = "20") int pageSize,
+                                                        @RequestParam(value = "pageNum", defaultValue = "1") int pageNum){
+
+        Page<Product> products = productService.getAllProducts(pageSize, pageNum);
+        return new ResponseEntity<>(products, HttpStatus.OK);
     }
 }
