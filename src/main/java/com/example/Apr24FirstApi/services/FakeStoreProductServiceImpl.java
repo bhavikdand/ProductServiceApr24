@@ -1,9 +1,11 @@
 package com.example.Apr24FirstApi.services;
 
+import com.example.Apr24FirstApi.configs.RedisTemplateConfig;
 import com.example.Apr24FirstApi.dtos.FakeProductServiceDto;
 import com.example.Apr24FirstApi.models.Category;
 import com.example.Apr24FirstApi.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -15,11 +17,15 @@ public class FakeStoreProductServiceImpl implements ProductService{
 
 
     private RestTemplate restTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Autowired
-    public FakeStoreProductServiceImpl(RestTemplate restTemplate) {
+    public FakeStoreProductServiceImpl(RestTemplate restTemplate, RedisTemplate<String, Object> redisTemplate) {
         this.restTemplate = restTemplate;
+        this.redisTemplate = redisTemplate;
     }
+
+
 
     private Product convertDtoToProduct(FakeProductServiceDto dto){
         Product product = new Product();
@@ -36,8 +42,14 @@ public class FakeStoreProductServiceImpl implements ProductService{
 
     @Override
     public Product getProductById(long id) {
-        FakeProductServiceDto product = this.restTemplate.getForObject("https://fakestoreapi.com/products/" + id, FakeProductServiceDto.class);
-        return convertDtoToProduct(product);
+        Product product = (Product) this.redisTemplate.opsForHash().get("PRODUCTS", "products_" + id);
+        if(product != null){
+            return product;
+        }
+        FakeProductServiceDto fakeProduct = this.restTemplate.getForObject("https://fakestoreapi.com/products/" + id, FakeProductServiceDto.class);
+        Product p = convertDtoToProduct(fakeProduct);
+        this.redisTemplate.opsForHash().put("PRODUCTS", "products_" + id, p);
+        return p;
     }
 
     @Override
