@@ -27,7 +27,7 @@ public class AuthUtils {
         HttpEntity<String> httpEntity = new HttpEntity<>(body, headers);
 
         try {
-            Token token = this.restTemplate.postForObject("http://localhost:8080/user/validate-token", httpEntity, Token.class);
+            Token token = this.restTemplate.postForObject("http://UserServiceMay24/user/validate-token", httpEntity, Token.class);
             return token != null;
         } catch (Exception e){
             return false;
